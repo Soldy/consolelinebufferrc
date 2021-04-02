@@ -14,18 +14,18 @@ const consoleLineBufferRcBase = function(){
      * @return string {id}
      */
     this.create = function(id){
-        if(typeof id === "undefined")
+        if(typeof id === 'undefined')
             id = _getSerial();
         id = id.toString();
-        if (typeof _buffers[id] !== "undefined")
+        if (typeof _buffers[id] !== 'undefined')
             return false;
         _buffers[id]={
-             original  : [],
-             processed : [],
-             setup     : new $setuprc(_setup);
-        }
+            original  : [],
+            processed : [],
+            setup     : new $setuprc(_setup)
+        };
         return id;
-    }
+    };
     /*
      * @param string {id}
      * @param string {text}
@@ -43,7 +43,7 @@ const consoleLineBufferRcBase = function(){
         );
         _lineSplitter(id);
         return true;
-    }
+    };
     /*
      * @param string {id}
      * @public
@@ -53,7 +53,7 @@ const consoleLineBufferRcBase = function(){
         if (!checkBuffers(id))
             return false;
         return _buffers[id.toString()].original;
-    }
+    };
     /*
      * @param string {id}
      * @param integer {first}
@@ -62,7 +62,7 @@ const consoleLineBufferRcBase = function(){
      */
     this.getScreen=function(id, first){
         id = id.toString();
-        if(typeof first !== "undefined")
+        if(typeof first !== 'undefined')
             first = 0;
         if (!_checkBuffers(id))
             return false;
@@ -70,7 +70,7 @@ const consoleLineBufferRcBase = function(){
             first,
             _buffers[id].height
         );
-    }
+    };
     /*
      * @param integer {width}
      * @param integer {height}
@@ -83,7 +83,7 @@ const consoleLineBufferRcBase = function(){
         buffers[id].width=width;
         buffers[id].height=height;
         return true;
-    }
+    };
     /*
      * @param string {id}
      * @public
@@ -94,7 +94,7 @@ const consoleLineBufferRcBase = function(){
             return false;
         _buffers[id].original = [];
         return true;
-    }
+    };
     /*
      * @param string {id}
      * @public
@@ -105,7 +105,7 @@ const consoleLineBufferRcBase = function(){
             return false;
         delete _buffers[id];
         return true;
-    }
+    };
     const _setup = {
         'rows':{
             'type'    : 'int',
@@ -115,7 +115,7 @@ const consoleLineBufferRcBase = function(){
             'type'    : 'int',
             'default' : 100
         }
-    }
+    };
     /*
      * @private
      * @var json
@@ -127,22 +127,22 @@ const consoleLineBufferRcBase = function(){
      * @return boolean
      */
     let _checkBuffers = function(id){
-        if (typeof _buffers[id.toString()] === "undefined")
+        if (typeof _buffers[id.toString()] === 'undefined')
             return false;
         return true;
-    }
+    };
 
     const _linesSplitter = function(id){
         _buffers[id].processed = [];
         for(let i of _buffers[id].original)
             _buffers[id].processed.concat(
-                 _lineSplitter(
-                     i,
-                     _buffers[id].setup,get('column')
-                 )
+                _lineSplitter(
+                    i,
+                    _buffers[id].setup,get('column')
+                )
             );
 
-    }
+    };
     const _lineSplitter = function(line, width){
         let out = [];
         while (line.length>width){
@@ -155,7 +155,7 @@ const consoleLineBufferRcBase = function(){
             line = line.substring(width);
         }
         return out;
-    }
+    };
     /*
      * @private
      * @var integer
@@ -168,10 +168,10 @@ const consoleLineBufferRcBase = function(){
     const _getSerial = function(){
         id  = _serial.toString();
         _serial++;
-        if (typeof _buffers[id] !== "undefined")
+        if (typeof _buffers[id] !== 'undefined')
             _id = _getSerial();
         return id;
-    }
-}
+    };
+};
 
 
