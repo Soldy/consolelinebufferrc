@@ -9,9 +9,9 @@ const $setuprc = (require('setuprc')).base;
  */
 const consoleLineBufferRcBase = function(){
     /*
-     * @param string {id}
+     * @param {string} id
      * @public
-     * @return string {id}
+     * @return {string} {id}
      */
     this.create = function(id){
         if(typeof id === 'undefined')
@@ -27,67 +27,45 @@ const consoleLineBufferRcBase = function(){
         return id;
     };
     /*
-     * @param string {id}
-     * @param string {text}
+     * @param {string} id
+     * @param {string} text
      * @public
-     * @return boolean
+     * @return {boolean}
      */
     this.add = function(id, text){
         id = id.toString();
         if (!_checkBuffers(id))
             return false;
         _buffers[id].original.push(
-            _buffer[id].original.concat(
+            _buffers[id].original.concat(
                 text.split(/\r\n|\n\r|\r|\n/)
             )
         );
-        _lineSplitter(id);
+        _linesSplitter(id);
         return true;
     };
     /*
-     * @param string {id}
+     * @param {string} id
      * @public
-     * @return string||boolean
+     * @return {string||boolean}
      */
     this.getAll=function(id){
-        if (!checkBuffers(id))
+        if (!_checkBuffers(id))
             return false;
         return _buffers[id.toString()].original;
     };
     /*
-     * @param string {id}
-     * @param integer {first}
+     * @param {string} id
      * @public
-     * @return string||boolean
+     * @return {setuprc}
      */
-    this.getScreen=function(id, first){
-        id = id.toString();
-        if(typeof first !== 'undefined')
-            first = 0;
-        if (!_checkBuffers(id))
-            return false;
-        return _buffers[id].processed.slice(
-            first,
-            _buffers[id].height
-        );
+    this.setup = function(id){
+        return _setup(id);
     };
     /*
-     * @param integer {width}
-     * @param integer {height}
+     * @param {string} id
      * @public
-     * @return boolean
-     */
-    this.setScreen=function (width, height){
-        if (!checkBuffers(id))
-            return false;
-        buffers[id].width=width;
-        buffers[id].height=height;
-        return true;
-    };
-    /*
-     * @param string {id}
-     * @public
-     * @return boolean
+     * @return {boolean}
      */
     this.clear=function(id){
         if (!_checkBuffers(id))
@@ -138,7 +116,7 @@ const consoleLineBufferRcBase = function(){
             _buffers[id].processed.concat(
                 _lineSplitter(
                     i,
-                    _buffers[id].setup,get('column')
+                    _buffers[id].setup.get('column')
                 )
             );
 
@@ -166,12 +144,12 @@ const consoleLineBufferRcBase = function(){
      * @return string
      */
     const _getSerial = function(){
-        id  = _serial.toString();
+        let id  = _serial.toString();
         _serial++;
         if (typeof _buffers[id] !== 'undefined')
-            _id = _getSerial();
+            id = _getSerial();
         return id;
     };
 };
 
-
+exports.base = consoleLineBufferRcBase;
