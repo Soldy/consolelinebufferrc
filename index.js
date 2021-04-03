@@ -36,14 +36,16 @@ const consoleLineBufferRcBase = function(){
         id = id.toString();
         if (!_checkBuffers(id))
             return false;
-        _buffers[id].original.push(
+        _buffers[id].original =
             _buffers[id].original.concat(
                 text.split(/\r\n|\n\r|\r|\n/)
-            )
         );
         _linesSplitter(id);
         return true;
     };
+    this.screen = function(id){
+        return _buffers[id].processed;
+    }
     /*
      * @param {string} id
      * @public
@@ -60,7 +62,7 @@ const consoleLineBufferRcBase = function(){
      * @return {setuprc}
      */
     this.setup = function(id){
-        return _setup(id);
+        return _buffers[id].setup;
     };
     /*
      * @param {string} id
@@ -113,27 +115,40 @@ const consoleLineBufferRcBase = function(){
     const _linesSplitter = function(id){
         _buffers[id].processed = [];
         for(let i of _buffers[id].original)
-            _buffers[id].processed.concat(
+            _buffers[id].processed = _buffers[id].processed.concat(
                 _lineSplitter(
                     i,
-                    _buffers[id].setup.get('column')
+                    _buffers[id].setup.get('columns')
                 )
             );
+         const count = _buffers[id].setup.get('rows') - _buffers[id].processed.length;
+         if(count > 0 )
+             _buffers[id].processed = _emptyLines(
+                 count,
+                 _buffers[id].setup.get('columns')
+             ).concat(_buffers[id].processed);
 
     };
-    const _lineSplitter = function(line, width){
+    const _lineSplitter = function(line, columns){
         let out = [];
-        while (line.length>width){
+        while (line.length>0){
             out.push(
                 line.substring(
                     0,
-                    width
-                )
+                    columns
+                ).padEnd(columns)
             );
-            line = line.substring(width);
+            line = line.substring(columns);
         }
         return out;
     };
+    const _emptyLines  = function(count, columns){
+        let out = [];
+        for (let i = 0; count > i ; i++ )
+             out.push((' ').padEnd(columns));
+        return out;
+        
+    }
     /*
      * @private
      * @var integer
