@@ -39,13 +39,13 @@ const consoleLineBufferRcBase = function(){
         _buffers[id].original =
             _buffers[id].original.concat(
                 text.split(/\r\n|\n\r|\r|\n/)
-        );
+            );
         _linesSplitter(id);
         return true;
     };
     this.screen = function(id){
         return _buffers[id].processed;
-    }
+    };
     /*
      * @param {string} id
      * @public
@@ -86,6 +86,10 @@ const consoleLineBufferRcBase = function(){
         delete _buffers[id];
         return true;
     };
+    /*
+    * @private
+    * @var {schemarc}
+    */
     const _setup = {
         'rows':{
             'type'    : 'int',
@@ -106,12 +110,15 @@ const consoleLineBufferRcBase = function(){
      * @private
      * @return boolean
      */
-    let _checkBuffers = function(id){
+    const _checkBuffers = function(id){
         if (typeof _buffers[id.toString()] === 'undefined')
             return false;
         return true;
     };
-
+    /*
+    * @param {string}
+    * @private
+    */
     const _linesSplitter = function(id){
         _buffers[id].processed = [];
         for(let i of _buffers[id].original)
@@ -121,14 +128,20 @@ const consoleLineBufferRcBase = function(){
                     _buffers[id].setup.get('columns')
                 )
             );
-         const count = _buffers[id].setup.get('rows') - _buffers[id].processed.length;
-         if(count > 0 )
-             _buffers[id].processed = _emptyLines(
-                 count,
-                 _buffers[id].setup.get('columns')
-             ).concat(_buffers[id].processed);
+        const count = _buffers[id].setup.get('rows') - _buffers[id].processed.length;
+        if(count > 0 )
+            _buffers[id].processed = _emptyLines(
+                count,
+                _buffers[id].setup.get('columns')
+            ).concat(_buffers[id].processed);
 
     };
+    /*
+    * @param {string}
+    * @param {integer}
+    * @private
+    * @return {array}
+    */
     const _lineSplitter = function(line, columns){
         let out = [];
         while (line.length>0){
@@ -142,13 +155,19 @@ const consoleLineBufferRcBase = function(){
         }
         return out;
     };
+    /*
+    * @param {integer}
+    * @param {integer}
+    * @private
+    * @return {array}
+    */
     const _emptyLines  = function(count, columns){
         let out = [];
         for (let i = 0; count > i ; i++ )
-             out.push((' ').padEnd(columns));
+            out.push((' ').padEnd(columns));
         return out;
         
-    }
+    };
     /*
      * @private
      * @var integer
