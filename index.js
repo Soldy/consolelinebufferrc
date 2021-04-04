@@ -43,18 +43,41 @@ const consoleLineBufferRcBase = function(){
         _linesSplitter(id);
         return true;
     };
-    this.screen = function(id){
-        return _buffers[id].processed;
+    this.screen = function(id, first){
+        return _screen(id, first);
     };
     /*
      * @param {string} id
      * @public
      * @return {string||boolean}
      */
-    this.getAll=function(id){
+    this.original=function(id){
         if (!_checkBuffers(id))
             return false;
-        return _buffers[id.toString()].original;
+        return _buffers[id.toString()].original.join('\n');
+    };
+    /*
+     * @param {string} id
+     * @param {string} name
+     * @param {any} value
+     * @public
+     * @return {boolean}
+     */
+    this.set = function(id, name, value){
+        if (!_checkBuffers(id))
+            return false;
+        return _buffers[id].setup.set(name, value);
+    };
+    /*
+     * @param {string} id
+     * @param {string} name
+     * @public
+     * @return {any}
+     */
+    this.get = function(id, name){
+        if (!_checkBuffers(id))
+            return false;
+        return _buffers[id].setup.get(name);
     };
     /*
      * @param {string} id
@@ -105,6 +128,37 @@ const consoleLineBufferRcBase = function(){
      * @var json
      */
     let _buffers = {};
+    /*
+     * @param {string}
+     * @param {integer}
+     * @oprivate
+     * @return {array}
+     */
+    const _screen  = function(id, first){
+        first = _first(id, first);
+        let line = first-1; // better than parse int
+        let last = line + _buffers[id].setup.get('rows');
+        let out = [];
+        while (last>line++)
+            out.push(
+                _buffers[id].processed[line]
+            );
+        return out;
+    };
+    /*
+     * @param {string}
+     * @param {integer}
+     * @oprivate
+     * @return {integer}
+     */
+    const _first = function(id, first){
+        if(
+            (typeof first === 'undefined') ||
+            (_buffers[id].setup.get('rows') > (_buffers[id].processed.length-first))
+        )
+            return _buffers[id].processed.length - _buffers[id].setup.get('rows');
+        return first;
+    };
     /*
      * @param string {id}
      * @private
