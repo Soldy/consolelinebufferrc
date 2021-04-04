@@ -1,0 +1,26 @@
+{
+  "name": "consolelinebufferrc",
+  "version": "0.0.1",
+  "description": "line buffer formater",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Soldy/consolelinebufferrc"
+  },
+  "dependencies": {
+    "setuprc": "^0.9.9-beta19"
+  },
+  "keywords": [],
+  "author": "Soldy <npmjs@gidigi.com> (http://gidigi.com)",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Soldy/consolelinebufferrc/issues"
+  },
+  "homepage": "https://github.com/Soldy/consolelinebufferrc#readme",
+  "devDependencies": {
+    "nanoTest": "^0.9.9-beta17c"
+  }
+}
