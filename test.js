@@ -3,29 +3,11 @@ const nanoTest  = new (require('nanoTest')).test({
 });
 const lineBufferRc = new (require('./index.js')).base();
 
-let newId = 0;
-
-
-nanoTest.add(
-    'create new buffer',
-    {
-        'function': function(){
-            newId = lineBufferRc.create();
-            console.log(newId);
-            return newId;
-        },
-        'options':['test1']
-    },
-    '==',
-    newId
-);
-
 nanoTest.add(
     'set columns',
     {
         'function':lineBufferRc.set,
         'options':[
-            newId,
             'columns',
             10
         ]
@@ -39,7 +21,6 @@ nanoTest.add(
     {
         'function':lineBufferRc.set,
         'options':[
-            newId,
             'rows',
             5
         ]
@@ -53,7 +34,6 @@ nanoTest.add(
     {
         'function':lineBufferRc.add,
         'options':[
-            newId,
             'hugo the amazing cool'
         ]
     },
@@ -65,9 +45,7 @@ nanoTest.add(
     'screen get',
     {
         'function':lineBufferRc.screen,
-        'options':[
-            newId
-        ]
+        'options':[]
     },
     'j==',
     [
@@ -83,10 +61,7 @@ nanoTest.add(
     'add more line',
     {
         'function':lineBufferRc.add,
-        'options':[
-            newId,
-            'hugo a dog'
-        ]
+        'options':['hugo a dog']
     },
     '===',
     true
@@ -96,9 +71,7 @@ nanoTest.add(
     'screen get',
     {
         'function':lineBufferRc.screen,
-        'options':[
-            newId
-        ]
+        'options':[]
     },
     'j==',
     [
@@ -114,10 +87,7 @@ nanoTest.add(
     'add more line',
     {
         'function':lineBufferRc.add,
-        'options':[
-            newId,
-            'not a cat'
-        ]
+        'options':['not a cat']
     },
     '===',
     true
@@ -126,10 +96,7 @@ nanoTest.add(
     'add more line',
     {
         'function':lineBufferRc.add,
-        'options':[
-            newId,
-            'not a rat'
-        ]
+        'options':['not a rat']
     },
     '===',
     true
@@ -139,9 +106,7 @@ nanoTest.add(
     'screen get',
     {
         'function':lineBufferRc.screen,
-        'options':[
-            newId
-        ]
+        'options':[]
     },
     'j==',
     [
@@ -157,9 +122,7 @@ nanoTest.add(
     'original',
     {
         'function':lineBufferRc.original,
-        'options':[
-            newId
-        ]
+        'options':[]
     },
     '===',
     'hugo the amazing cool\nhugo a dog\nnot a cat\nnot a rat'
