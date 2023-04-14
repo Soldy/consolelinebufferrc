@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/Soldy/consolelinebufferrc#readme",
   "devDependencies": {
-    "nanoTest": "^0.9.9-beta17c"
+    "nanoTest": "0.9.9-beta31"
   }
 }
